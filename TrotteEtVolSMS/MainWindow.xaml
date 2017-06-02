@@ -1,0 +1,85 @@
+﻿<Window x:Class="TrotteEtVolSMS.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TrotteEtVolSMS"
+        mc:Ignorable="d"
+        Title="Trotte &amp; Vol Messenger">
+    <Window.Resources>
+        <local:RecipientConverter x:Key="RecipientConvert"/>
+
+        <DataTemplate x:Key="RecipientTemplate">
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <Image Source="{Binding Path=Role, Converter={StaticResource RecipientConvert}}" Margin="0,0,10,0" />
+                <TextBlock Text="{Binding Team}" Margin="0,0,10,0" Foreground="Gray"/>
+                <TextBlock Text="{Binding Name}" Foreground="DarkBlue" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="HistoryTemplate">
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <Image Source="sms.png" Margin="0,0,10,0"/>
+                <TextBlock Text="{Binding ProxyDate}" />
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="86*"/>
+            <ColumnDefinition Width="205*"/>
+            <ColumnDefinition Width="90*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- recipients -->
+        <Label Content="Destinataires" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="152" Grid.Column="0"/>
+        <ListBox x:Name="RecipientListBox" HorizontalAlignment="Left" 
+                 Height="418" Margin="10,36,0,0" VerticalAlignment="Top" Grid.Column="0" MinWidth="152"
+                 ItemsSource="{Binding Recipients}" ItemTemplate="{StaticResource RecipientTemplate}"
+                 SelectionMode="Multiple" >
+
+
+        </ListBox>
+        <Button x:Name="SelectAllBtn" Content="{Binding Path=SelectAllBtnContent, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" HorizontalAlignment="Left" Margin="10,459,0,0" VerticalAlignment="Top" Width="152" Grid.Column="0"
+                Click="SelectAllBtn_Click"/>
+
+        <!-- message -->
+        <Label Content="Message" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="62" Grid.Column="1"/>
+        <TextBox x:Name="MessageBox" Grid.Column="1" Margin="10,36,9.6,108.6" KeyUp="MessageBox_KeyUp" TextWrapping="Wrap" />
+        <Button x:Name="SendBtn" Content="Envoyer" HorizontalAlignment="Left" Margin="10,459,0,0" VerticalAlignment="Top" Width="152" Grid.Column="1" Click="SendButton_Click"/>
+        <Label x:Name="CharacterCountLabel" Content="{Binding Path=CharacterCount, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" Grid.Column="1" HorizontalAlignment="Left" Margin="86,10,0,0" VerticalAlignment="Top" Width="102"/>
+
+        <!-- history -->
+        <ListBox x:Name="HistoryListBox" HorizontalAlignment="Center" Height="419" Margin="0,36,3.6,0" VerticalAlignment="Top" Width="166"
+                 Grid.Column="2" VerticalContentAlignment="Top" SelectionMode="Single"
+                 ItemsSource="{Binding Messages}" ItemTemplate="{StaticResource HistoryTemplate}"/>
+        <Button x:Name="HistoryBtn" Content="Afficher" HorizontalAlignment="Left" Margin="14.4,464,-0.4,0" VerticalAlignment="Top" Width="166" Grid.Column="2"
+                Click="HistoryBtn_Click"/>
+        
+        <Label Content="Historique" HorizontalAlignment="Left" Margin="5.4,5,0,0" VerticalAlignment="Top" Width="152" Grid.Column="2" />
+
+    </Grid>
+
+    <!--<StackPanel >
+        <StackPanel v>
+            <TextBox HorizontalAlignment="Left" Height="196" Margin="197,25,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"/>
+            <Label Content="Message" HorizontalAlignment="Left" Margin="197,0,0,0" VerticalAlignment="Top" />
+        </StackPanel>
+
+
+        <StackPanel HorizontalAlignment="Left" Height="100" Margin="143,290,0,0" VerticalAlignment="Top" Width="100">
+            <Button Content="Tout sélectionner" HorizontalAlignment="Left" Margin="10,476,0,0" VerticalAlignment="Top" Width="166"/>
+            <ListBox HorizontalAlignment="Left" Height="446" Margin="10,25,0,0" VerticalAlignment="Top" Width="166"/>
+            <Label Content="Destinataires" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" />
+        </StackPanel>
+
+
+        <StackPanel>
+            <ListBox HorizontalAlignment="Right" Height="445" Margin="217.2,26,0,0" VerticalAlignment="Top" Width="166" Grid.Column="1" VerticalContentAlignment="Top"/>
+            <Label Content="Historique" HorizontalAlignment="Left" Margin="225.2,0,0,0" VerticalAlignment="Top" Grid.Column="1" />
+            <Button Content="Afficher" HorizontalAlignment="Left" Margin="217.2,476,0,0" VerticalAlignment="Top" Width="166" Grid.Column="1"/>
+        </StackPanel>
+    </StackPanel>-->
+
+</Window>
