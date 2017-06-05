@@ -54,6 +54,7 @@
                 <Label x:Name="IpLabel" DockPanel.Dock="Left" Content="0.0.0.0"/>
                 <Image x:Name="PingState" DockPanel.Dock="Left" Width="20" Height="20"/>
                 <Label x:Name="PingResult" DockPanel.Dock="Left"/>
+                <Button x:Name="refreshBtn" Content="Refresh" Click="refreshBtn_Click" Width="100"/>
             </DockPanel>
 
             <StackPanel Orientation="Horizontal"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" DockPanel.Dock="Top" >
@@ -80,6 +81,7 @@
                      SelectionMode="Single" ItemsSource="{Binding Messages}" ItemTemplate="{StaticResource HistoryTemplate}"/>
 
         </DockPanel>
+
     </Grid>
 
 

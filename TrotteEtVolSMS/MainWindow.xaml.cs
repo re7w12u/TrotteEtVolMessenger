@@ -105,7 +105,7 @@ namespace TrotteEtVolSMS
             request.Method = "get";
             try
             {
-                //WebResponse response = request.GetResponse();
+                WebResponse response = request.GetResponse();
                 messageSaved = history.SaveMessage(new Message { Recipients = recipients, Body = message, SendDate = DateTime.Now });
             }
             catch (Exception)
@@ -180,12 +180,19 @@ namespace TrotteEtVolSMS
             {
                 PingResult.Content = String.Format("TTL:{0} | RoundTrip:{1}",reply.Options.Ttl, reply.RoundtripTime);
                 PingState.Source = new BitmapImage(new Uri(@"/images/ok.png", UriKind.Relative));
+                SendBtn.IsEnabled = true;
             }
             else
             {
                 PingResult.Content = String.Empty;
                 PingState.Source = new BitmapImage(new Uri(@"/images/ko.png", UriKind.Relative));
+                SendBtn.IsEnabled = false;
             }
+        }
+
+        private void refreshBtn_Click(object sender, RoutedEventArgs e)
+        {
+            CheckGateway();
         }
     }
 }
