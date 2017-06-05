@@ -19,13 +19,13 @@
 
         <DataTemplate x:Key="HistoryTemplate">
             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                <Image Source="sms.png" Margin="0,0,10,0"/>
+                <Image Source="/Images/sms.png" Margin="0,0,10,0"/>
                 <TextBlock Text="{Binding ProxyDate}" />
             </StackPanel>
         </DataTemplate>
     </Window.Resources>
 
-    <Grid>
+    <Grid x:Name="LayoutRoot">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="86*"/>
             <ColumnDefinition Width="205*"/>
@@ -33,53 +33,54 @@
         </Grid.ColumnDefinitions>
 
         <!-- recipients -->
-        <Label Content="Destinataires" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="152" Grid.Column="0"/>
-        <ListBox x:Name="RecipientListBox" HorizontalAlignment="Left" 
-                 Height="418" Margin="10,36,0,0" VerticalAlignment="Top" Grid.Column="0" MinWidth="152"
-                 ItemsSource="{Binding Recipients}" ItemTemplate="{StaticResource RecipientTemplate}"
-                 SelectionMode="Multiple" >
+        <DockPanel x:Name="DockPanelLeft" Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10" LastChildFill="True" >
+            <Label Content="Destinataires" HorizontalContentAlignment="Stretch" DockPanel.Dock="Top"/>
 
+            <Button x:Name="SelectAllBtn" Content="{Binding Path=SelectAllBtnContent, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" 
+                    Click="SelectAllBtn_Click" Height="30" VerticalAlignment="Bottom" DockPanel.Dock="Top"  Margin="0,0,0,10"/>
 
-        </ListBox>
-        <Button x:Name="SelectAllBtn" Content="{Binding Path=SelectAllBtnContent, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" HorizontalAlignment="Left" Margin="10,459,0,0" VerticalAlignment="Top" Width="152" Grid.Column="0"
-                Click="SelectAllBtn_Click"/>
+            <ListBox x:Name="RecipientListBox" ItemsSource="{Binding Recipients}" ItemTemplate="{StaticResource RecipientTemplate}" 
+                     SelectionMode="Multiple" DockPanel.Dock="Top" />
+            <!--Height="{Binding ElementName=DockPanelLeft, Path=ActualHeight, Converter={StaticResource HeightConvert}}"/>-->
+            <!--Height="{Binding ElementName=LayoutRoot, Path=ActualHeight, Converter={StaticResource HeightConvert}}"/>-->
+            
+        </DockPanel>
 
         <!-- message -->
-        <Label Content="Message" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="62" Grid.Column="1"/>
-        <TextBox x:Name="MessageBox" Grid.Column="1" Margin="10,36,9.6,108.6" KeyUp="MessageBox_KeyUp" TextWrapping="Wrap" />
-        <Button x:Name="SendBtn" Content="Envoyer" HorizontalAlignment="Left" Margin="10,459,0,0" VerticalAlignment="Top" Width="152" Grid.Column="1" Click="SendButton_Click"/>
-        <Label x:Name="CharacterCountLabel" Content="{Binding Path=CharacterCount, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" Grid.Column="1" HorizontalAlignment="Left" Margin="86,10,0,0" VerticalAlignment="Top" Width="102"/>
+        <DockPanel Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="10" >
 
-        <!-- history -->
-        <ListBox x:Name="HistoryListBox" HorizontalAlignment="Center" Height="419" Margin="0,36,3.6,0" VerticalAlignment="Top" Width="166"
-                 Grid.Column="2" VerticalContentAlignment="Top" SelectionMode="Single"
-                 ItemsSource="{Binding Messages}" ItemTemplate="{StaticResource HistoryTemplate}"/>
-        <Button x:Name="HistoryBtn" Content="Afficher" HorizontalAlignment="Left" Margin="14.4,464,-0.4,0" VerticalAlignment="Top" Width="166" Grid.Column="2"
-                Click="HistoryBtn_Click"/>
+            <DockPanel DockPanel.Dock="Top" Margin="0,0,0,10">
+                <Label Content="Gateway" DockPanel.Dock="Left"/>
+                <Label x:Name="IpLabel" DockPanel.Dock="Left" Content="0.0.0.0"/>
+                <Image x:Name="PingState" DockPanel.Dock="Left" Width="20" Height="20"/>
+                <Label x:Name="PingResult" DockPanel.Dock="Left"/>
+            </DockPanel>
+
+            <StackPanel Orientation="Horizontal"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" DockPanel.Dock="Top" >
+                <Label Content="Message" />
+                <Label x:Name="CharacterCountLabel" Content="{Binding Path=CharacterCount, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
+            </StackPanel>
+
+            <TextBox x:Name="MessageBox" KeyUp="MessageBox_KeyUp" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Stretch" MinHeight="200"
+                      DockPanel.Dock="Top"/>
+            
+            <Button x:Name="SendBtn" Content="Envoyer" Click="SendButton_Click" DockPanel.Dock="Top" Height="30" Margin="0,10,0,0" />
+        </DockPanel>
         
-        <Label Content="Historique" HorizontalAlignment="Left" Margin="5.4,5,0,0" VerticalAlignment="Top" Width="152" Grid.Column="2" />
+        <!-- history -->
+        <DockPanel Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10" LastChildFill="True">
 
+            
+            <Label Content="Historique" DockPanel.Dock="Top"   />
+            
+            <Button x:Name="HistoryBtn" Content="Afficher" Height="30" Margin="0,0,0,10"
+                     Click="HistoryBtn_Click"  DockPanel.Dock="Top"/>
+            
+            <ListBox x:Name="HistoryListBox" DockPanel.Dock="Top"
+                     SelectionMode="Single" ItemsSource="{Binding Messages}" ItemTemplate="{StaticResource HistoryTemplate}"/>
+
+        </DockPanel>
     </Grid>
 
-    <!--<StackPanel >
-        <StackPanel v>
-            <TextBox HorizontalAlignment="Left" Height="196" Margin="197,25,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"/>
-            <Label Content="Message" HorizontalAlignment="Left" Margin="197,0,0,0" VerticalAlignment="Top" />
-        </StackPanel>
-
-
-        <StackPanel HorizontalAlignment="Left" Height="100" Margin="143,290,0,0" VerticalAlignment="Top" Width="100">
-            <Button Content="Tout sélectionner" HorizontalAlignment="Left" Margin="10,476,0,0" VerticalAlignment="Top" Width="166"/>
-            <ListBox HorizontalAlignment="Left" Height="446" Margin="10,25,0,0" VerticalAlignment="Top" Width="166"/>
-            <Label Content="Destinataires" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" />
-        </StackPanel>
-
-
-        <StackPanel>
-            <ListBox HorizontalAlignment="Right" Height="445" Margin="217.2,26,0,0" VerticalAlignment="Top" Width="166" Grid.Column="1" VerticalContentAlignment="Top"/>
-            <Label Content="Historique" HorizontalAlignment="Left" Margin="225.2,0,0,0" VerticalAlignment="Top" Grid.Column="1" />
-            <Button Content="Afficher" HorizontalAlignment="Left" Margin="217.2,476,0,0" VerticalAlignment="Top" Width="166" Grid.Column="1"/>
-        </StackPanel>
-    </StackPanel>-->
 
 </Window>

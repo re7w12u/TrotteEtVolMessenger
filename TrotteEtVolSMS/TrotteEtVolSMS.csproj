@@ -104,17 +104,21 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="assistant30x30.jpg">
+    <Resource Include="Images\assistant30x30.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="paraglider30x30.jpg">
+    <Resource Include="Images\paraglider30x30.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="sms.png" />
+    <Resource Include="Images\sms.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ko.png" />
+    <Resource Include="Images\ok.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

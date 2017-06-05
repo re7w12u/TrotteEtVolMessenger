@@ -16,6 +16,7 @@ using System.Configuration;
 using System.Net;
 using System.IO;
 using System.ComponentModel;
+using System.Net.NetworkInformation;
 
 namespace TrotteEtVolSMS
 {
@@ -24,20 +25,13 @@ namespace TrotteEtVolSMS
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        #region fields
         RecipientsModel recipients;
         HistoryModel history;
         bool messageSaved;
-
-        #region INotifyPropertyChanged 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged(string propName)
-        {
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propName));
-        }
-
         #endregion
 
+        #region properties
         private string _selectAllBtnContent;
         public string SelectAllBtnContent
         {
@@ -64,10 +58,24 @@ namespace TrotteEtVolSMS
                 OnPropertyChanged("CharacterCount");
             }
         }
+        #endregion
 
+        #region INotifyPropertyChanged 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propName)
+        {
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propName));
+        }
+
+        #endregion
+               
         public MainWindow()
         {
             InitializeComponent();
+
+            CheckGateway();
+
             recipients = new RecipientsModel();
             RecipientListBox.DataContext = recipients;
             history = new HistoryModel();
@@ -153,6 +161,31 @@ namespace TrotteEtVolSMS
             int remaining = max - leftover;
 
             CharacterCount = String.Format("{0}/160 ({1})", remaining, smsCount);
+        }
+
+        private void CheckGateway()
+        {
+            string ip = ConfigurationManager.AppSettings.Get("ip");
+            IpLabel.Content = ip;
+
+            string port = ConfigurationManager.AppSettings.Get("port");
+            string message = MessageBox.Text;
+            Ping ping = new Ping();
+            // Create a buffer of 32 bytes of data to be transmitted.
+            string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+            byte[] buffer = Encoding.ASCII.GetBytes(data);
+            int timeout = 120;
+            PingReply reply = ping.Send(ip, timeout, buffer, new PingOptions());
+            if (reply.Status == IPStatus.Success)
+            {
+                PingResult.Content = String.Format("TTL:{0} | RoundTrip:{1}",reply.Options.Ttl, reply.RoundtripTime);
+                PingState.Source = new BitmapImage(new Uri(@"/images/ok.png", UriKind.Relative));
+            }
+            else
+            {
+                PingResult.Content = String.Empty;
+                PingState.Source = new BitmapImage(new Uri(@"/images/ko.png", UriKind.Relative));
+            }
         }
     }
 }

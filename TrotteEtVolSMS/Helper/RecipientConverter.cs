@@ -14,11 +14,11 @@ namespace TrotteEtVolSMS
         {
             if(value.ToString().ToLower() == "pilote")
             {
-                return "paraglider30x30.jpg";
+                return "/images/paraglider30x30.jpg";
             }
             else if (value.ToString().ToLower() == "assistant")
             {
-                return "assistant30x30.jpg";
+                return "/images/assistant30x30.jpg";
             }
             else
             {
