@@ -16,8 +16,9 @@ namespace TrotteEtVolSMS
             {
                 Name = values[0],
                 Role = values[1],
-                Phone = values[2],
-                Team = values[3]
+                Phone = values[2].Replace(" ",""),
+                Team = Convert.ToInt32(values[3]),
+                Parcours = values[4]
             };
         }
     }
@@ -28,6 +29,7 @@ namespace TrotteEtVolSMS
         public string Name { get; set; }
         public string Phone { get; set; }
         public string Role { get; set; }
-        public string Team { get; set; }
+        public int Team { get; set; }
+        public string Parcours { get; set; }
     }
 }
