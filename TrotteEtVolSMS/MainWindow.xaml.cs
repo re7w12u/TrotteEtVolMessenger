@@ -91,7 +91,7 @@ namespace TrotteEtVolSMS
 
         }
 
-        
+
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
             if (BatchCheckBox.IsChecked ?? false)
@@ -101,8 +101,12 @@ namespace TrotteEtVolSMS
             }
             else
             {
-                SendMessage();
+                SendOneByOneMessage();
             }
+
+            // clear UI
+
+            MessageBox.Text = String.Empty;
         }
 
         private void SendMessage()
@@ -123,7 +127,28 @@ namespace TrotteEtVolSMS
             messageSaved = history.SaveMessage(responseBody);
         }
 
+        private void SendOneByOneMessage()
+        {
+            List<Recipient> recipients = RecipientListBox.SelectedItems.Cast<Recipient>().ToList();
+            string message = MessageBox.Text;
+            Message responseBody = new Message { Recipients = new List<Recipient>(), Body = message, SendDate = DateTime.Now };
 
+            foreach (Recipient r in recipients)
+            {
+                try
+                {
+                    if (String.IsNullOrWhiteSpace(r.Phone)) throw new NullReferenceException("pas de numéro de téléphone pour " + r.Name);
+                    SendSMS(r.Phone, message);
+                    responseBody.Recipients.Add(r);
+                }
+                catch (Exception err)
+                {
+                    responseBody.Body += "\r\n-------------------------\r\n ERROR OCCURED \r\n Message not sent for user : " + r.Name + " - " + r.Phone + "\r\n" + err.Message + "\r\n \r\n";
+                }
+            }
+            
+            messageSaved = history.SaveMessage(responseBody);
+        }
 
         private void SendMessageBatch(int batchLimit)
         {
@@ -173,7 +198,10 @@ namespace TrotteEtVolSMS
             WebRequest request = WebRequest.Create(url);
             request.Method = "get";
 
-            using (WebResponse response = request.GetResponse()) { }
+            using (WebResponse response = request.GetResponse())
+            {
+                Debug.WriteLine(response);
+            }
         }
 
         // display message selected in history list
